@@ -61,31 +61,10 @@ ListenChar(2);
 if practice == 1
     global Directory
     Directory.mainDir = pwd;
-    if session == 1
-        run practice_part2 % practice no saccade memory cue only, 4 of last 5 trials corr to continue
-        if ETconnected 
-            run eyelink_setup;  
-        end
-        
-        run practice_1 % no saccade QUEST practice
-        if ETconnected 
-            run eyelink_setup;  
-        end
-        clear Results;
-        
-        %tell participant to do the practice and follow the instructions
-        %and to come back out if need calibration or have questions
-        run practice_3; %50 trials 50% spatio no saccade
-        clear Results;
-        
-        run practice_2; % saccade practice
-        clear Results;
+    run practice_part1 % practice no saccade memory cue only, 4 of last 5 trials corr to continue
+    if ETconnected 
+        run eyelink_setup;  
     end
-    if session > 1
-        run practice_25; % saccade practice, half trials
-        clear Results;
-    end
-
     run end_of_practice;
     correctProbeCount = 0; correctCount = 0;  %a precaution to make sure practice trials aren't included in real data
     pracDone = 1; 
