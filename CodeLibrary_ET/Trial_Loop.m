@@ -1,8 +1,4 @@
 %% START SCREEN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% Number of correct memory tests beginning of experiment
-correctCount = 0; 
-
 % Resetting gt if necessary after practice
 grandTrial = 1; 
 

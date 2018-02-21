@@ -18,58 +18,44 @@ run inputPrompt;
 % Setup eye tracker if ET on/connected
 HideCursor;
 if ETconnected
-    run EyelinkExample;
+    run EyelinkExample; %Better than standard setup, recommended by EWD, PS modified
+else
+    % Sync tests
+    Screen('Preference', 'SkipSyncTests', 0); %1 means skip, 0 means do not skip
+
+    % Number for each of the screens attached to our computer
+    screens = Screen('Screens'); % [0, 1] 0 is the main display with the menu bar and 1 is the first external display
+    KbName('UnifyKeyNames');
+
+    % Select which screen/monitor to draw on
+    screenNumber = max(screens); % use large display on dual monitor screens (external monitor)
+
+    % Keyboard check
+    keyBoards = GetKeyboardIndices;
+    keyboardNum = max(keyBoards);
+
+    % Mouse Check
+    mice = GetMouseIndices;
+    mouseNum = max(mice);
+
+    % To prevent typing into the matlab code editor
+    commandwindow; 
+    
+    % Turn off the output to the command window
+    ListenChar(2);
 end
 
-% Sync tests
-Screen('Preference', 'SkipSyncTests', 0); %1 means skip, 0 means do not skip
-
-% Number for each of the screens attached to our computer
-screens = Screen('Screens'); % [0, 1] 0 is the main display with the menu bar and 1 is the first external display
-KbName('UnifyKeyNames');
-
-% Select which screen/monitor to draw on
-screenNumber = max(screens); % use large display on dual monitor screens (external monitor)
-
-% Keyboard check
-keyBoards = GetKeyboardIndices;
-keyboardNum = max(keyBoards);
-
-% Mouse Check
-mice = GetMouseIndices;
-mouseNum = max(mice);
-
 %% RUN TASK 
-
-% To prevent typing into the matlab code editor
-commandwindow; 
-% hide cursor
-HideCursor;
-
 % Set up stim locations
 run setVariables;
 
-% Go back to regular ET setup
-if ETconnected 
-    run eyelink_setup.m
-end
-
-% Turn off the output to the command window
-ListenChar(2);
-
 % Practice loops
 if practice == 1
-    global Directory
-    Directory.mainDir = pwd;
     run practice_part1 % practice no saccade memory cue only, 4 of last 5 trials corr to continue
     if ETconnected 
         run eyelink_setup;  
     end
     run end_of_practice;
-    correctProbeCount = 0; correctCount = 0;  %a precaution to make sure practice trials aren't included in real data
-    pracDone = 1; 
-elseif practice == 0  
-    pracDone = 0;
 end
 
 practice=0;
