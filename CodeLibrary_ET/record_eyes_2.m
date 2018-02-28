@@ -9,8 +9,8 @@ et_null_check = 0;
 % Simply recording (no fixation required) 
 % Loop until a pre-determined duration, when current time is equal to or 
 % greater than the set staretime delay
-while fixdone == 0 && cutoff_thresh < .6 %saccade needs to complete < 600 ms
-    if ETconnected
+if ETconnected
+    while fixdone == 0 && cutoff_thresh < .6 %saccade needs to complete < 600 ms
         error = Eyelink('CheckRecording');        
         if Eyelink( 'NewFloatSampleAvailable') > 0
             % get the sample in the form of an event structure
@@ -83,8 +83,6 @@ while fixdone == 0 && cutoff_thresh < .6 %saccade needs to complete < 600 ms
                 fixdone = 1;
             end
         end
-    else
-        cutoff_thresh = (GetSecs) - drawSacTime;
     end
 end
 

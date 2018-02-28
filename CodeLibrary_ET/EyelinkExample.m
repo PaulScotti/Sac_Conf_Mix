@@ -19,19 +19,10 @@ try
     dummymode=0;       % set to 1 to initialize in dummymode (rather pointless for this example though)
     
     % STEP 1
+    screenNumber=max(Screen('Screens'));
+    window=Screen('OpenWindow', screenNumber);
     % Sync tests
     Screen('Preference', 'SkipSyncTests', 0); %1 means skip, 0 means do not skip
-
-    % Number for each of the screens attached to our computer
-    screens = Screen('Screens'); % [0, 1] 0 is the main display with the menu bar and 1 is the first external display
-    KbName('UnifyKeyNames');
-
-    % Select which screen/monitor to draw on
-    screenNumber = max(screens); % use large display on dual monitor screens (external monitor)
-
-    % Keyboard check
-    keyBoards = GetKeyboardIndices;
-    keyboardNum = max(keyBoards);
 
     % Mouse Check
     mice = GetMouseIndices;

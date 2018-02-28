@@ -5,13 +5,14 @@ prefs = getPreferences(screenCenterX,screenCenterY,randrotate,flip,fullcolormatr
 colorWheelLocations = colorwheelLocations(window,prefs);
 fullcolormatrixFlip = flipud(fullcolormatrix);
 asymType = 1;
+conf = 0;
 startingcolor = nan;
 
 % buttons will be empty if no mouse click, need to reset every trial
 buttons = [];
 
 % Wait for click.
-SetMouse(screenCenterX, screenCenterY, screenNumber, mouseNum);
+SetMouse(screenCenterX, screenCenterY, screenNumber);
 ShowCursor('Arrow');
 
 % If mouse button is already down, wait for release.
@@ -23,7 +24,7 @@ everMovedFromCenter = false;
 
 startReport = GetSecs;
 while ~any(buttons)
-    drawColorWheel(window, prefs);
+    drawColorWheel(window, conf, prefs);
     [x,y,buttons] = GetMouse(window);
     [minDistance, minDistanceIndex] = min(sqrt((colorWheelLocations(1, :) - x).^2 + (colorWheelLocations(2, :) - y).^2));
 
@@ -49,9 +50,9 @@ while ~any(buttons)
     lastClickX = cosd(clickAngle).*prefs.colorWheelRadius + prefs.cx;
     lastClickY = sind(clickAngle).*prefs.colorWheelRadius + prefs.cy;
 
-    drawColorWheel(window, prefs);
+    drawColorWheel(window, conf, prefs);
 
-    Screen('FillOval', window, [225 225 225], CenterRectOnPointd([0 0 30 30], lastClickX, lastClickY), 10);
+    Screen('FillOval', window, [225 225 225], CenterRectOnPointd([0 0 25 25], lastClickX, lastClickY), 10);
 
     madeClick1 = Screen('Flip', window);
 end
@@ -72,6 +73,8 @@ while any(buttons) % wait for release
 end
 
 %% Confidence ring part 1
+conf = 1;
+
 % If mouse button is already down, wait for release.
 GetMouse(window);
 while any(buttons)
@@ -80,6 +83,7 @@ end
 everMovedFromCenter = false;  
 
 while ~any(buttons)     
+    drawColorWheel(window, conf, prefs);
     [x,y,buttons] = GetMouse(window);
     [minDistance, minDistanceIndex] = min(sqrt((colorWheelLocations(1, :) - x).^2 + (colorWheelLocations(2, :) - y).^2));
 
@@ -114,22 +118,24 @@ while ~any(buttons)
     end
     asymmetric = wrap360(clickAngle,futureclickAngle);
 
+    drawColorWheel(window, conf, prefs);
+
     %draw ring surrounding confidence
+    ringvalues = within360(confValues+randrotate);
     if flip == 1
-        Screen('DrawDots', window, colorWheelLocations(:,confValues), 40, [0 0 0], [], 1);
+        Screen('DrawDots', window, colorWheelLocations(:,confValues), 40, fullcolormatrix(ringvalues,:)', [], 1);
     elseif flip == 2
-        Screen('DrawDots', window, colorWheelLocations(:,confValues), 40, [0 0 0], [], 1);
+        Screen('DrawDots', window, colorWheelLocations(:,confValues), 40, fullcolormatrixFlip(ringvalues,:)', [], 1);
     end
-    
-    % draw color wheel
-    drawColorWheel(window, prefs);
+    drawColorWheel(window, conf, prefs);
     
     %draw where last click was
     if flip == 1
-        Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 30 30], lastClickX, lastClickY), 10);
+        Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 25 25], lastClickX, lastClickY), 10);
     elseif flip == 2
-        Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 30 30], lastClickX, lastClickY), 10);
+        Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 25 25], lastClickX, lastClickY), 10);
     end
+    
     
     madeClick2 = Screen('Flip', window);
 end
@@ -147,6 +153,7 @@ end
 everMovedFromCenter = false;  
 
 while ~any(buttons)     
+    drawColorWheel(window, conf, prefs);
     [x,y,buttons] = GetMouse(window);
     [minDistance, minDistanceIndex] = min(sqrt((colorWheelLocations(1, :) - x).^2 + (colorWheelLocations(2, :) - y).^2));
 
@@ -185,33 +192,24 @@ while ~any(buttons)
     else
         confValues2 = clickAngle;
     end
-
-    %draw previous ring surrounding confidence
+    
+    %draw previous ring
     if flip == 1
-        Screen('DrawDots', window, colorWheelLocations(:,confValues), 40, [0 0 0], [], 1);
+        Screen('DrawDots', window, colorWheelLocations(:,confValues), 20, fullcolormatrix(ringvalues,:)', [], 1);
     elseif flip == 2
-        Screen('DrawDots', window, colorWheelLocations(:,confValues), 40, [0 0 0], [], 1);
+        Screen('DrawDots', window, colorWheelLocations(:,confValues), 20, fullcolormatrixFlip(ringvalues,:)', [], 1);
     end
     
     %draw new ring surrounding confidence
+    ringvalues2 = within360(confValues2+randrotate);
     if flip == 1
-        Screen('DrawDots', window, colorWheelLocations(:,confValues2), 40, [0 0 0], [], 1);
+        Screen('DrawDots', window, colorWheelLocations(:,confValues2), 20, fullcolormatrix(ringvalues2,:)', [], 1);
     elseif flip == 2
-        Screen('DrawDots', window, colorWheelLocations(:,confValues2), 40, [0 0 0], [], 1);
-    end
-    
-    % draw color wheel
-    drawColorWheel(window, prefs);
-    
-    %draw where last click was
-    if flip == 1
-        Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 25 25], lastClickX, lastClickY), 10);
-    elseif flip == 2
-        Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 25 25], lastClickX, lastClickY), 10);
+        Screen('DrawDots', window, colorWheelLocations(:,confValues2), 20, fullcolormatrixFlip(ringvalues2,:)', [], 1);
     end
     
     %draw where last click was
-    Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 30 30], lastClickX, lastClickY), 10);
+    Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 25 25], lastClickX, lastClickY), 10);
     
     madeClick3 = Screen('Flip', window);
 end
@@ -222,25 +220,26 @@ HideCursor;
 %calculate difference
 col_diff = wrap360(testColor, reportedcolor);    
 
+%draw black circle
+drawColorWheel(window, conf, prefs);
+
 %draw previous ring
 if flip == 1
-    Screen('DrawDots', window, colorWheelLocations(:,confValues), 40, [0 0 0], [], 1);
+    Screen('DrawDots', window, colorWheelLocations(:,confValues), 20, fullcolormatrix(ringvalues,:)', [], 1);
 elseif flip == 2
-    Screen('DrawDots', window, colorWheelLocations(:,confValues), 40, [0 0 0], [], 1);
+    Screen('DrawDots', window, colorWheelLocations(:,confValues), 20, fullcolormatrixFlip(ringvalues,:)', [], 1);
 end
 
-%draw second ring surrounding confidence
+%draw new ring surrounding confidence
+ringvalues2 = within360(confValues2+randrotate);
 if flip == 1
-    Screen('DrawDots', window, colorWheelLocations(:,confValues2), 40, [0 0 0], [], 1);
+    Screen('DrawDots', window, colorWheelLocations(:,confValues2), 20, fullcolormatrix(ringvalues2,:)', [], 1);
 elseif flip == 2
-    Screen('DrawDots', window, colorWheelLocations(:,confValues2), 40, [0 0 0], [], 1);
+    Screen('DrawDots', window, colorWheelLocations(:,confValues2), 20, fullcolormatrixFlip(ringvalues2,:)', [], 1);
 end
-
-%draw color wheel
-drawColorWheel(window, prefs);
 
 %draw where last click was
-Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 30 30], lastClickX, lastClickY), 10);
+Screen('FillOval', window, fullcolormatrix(reportedcolor,:), CenterRectOnPointd([0 0 25 25], lastClickX, lastClickY), 10);
 
 % Show original color
 Screen('FillOval', window, fullcolormatrix(testColor,:), CenterRectOnPointd([0 0 75 75], trueClickX, trueClickY), 10);

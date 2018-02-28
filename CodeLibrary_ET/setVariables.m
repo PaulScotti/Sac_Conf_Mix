@@ -8,6 +8,7 @@ black = BlackIndex(screenNumber);
 grey = white / 2;
  
 %Open up Psychtoolbox and fit to screen size
+Screen('Preference', 'SkipSyncTests', 1); %disable warning pop-ups
 if ~ETconnected
     try
     [window,rect] = Screen('OpenWindow',screenNumber, grey);
@@ -39,13 +40,13 @@ Priority(topPriorityLevel);
 % Create folder and file where data  will be stored
 % Results raw data
 DataFolderMat = [cur_dir '/data/mat']; % Location to save data
-OutputFile = [DataFolderMat '/Results_s' subjNum '_' sessionNum '_' subj_init '.mat'];
+OutputFile = [DataFolderMat '/Results_s' subjNum '_' subj_init '.mat'];
 %For practice data
 DataFolderPrac = [cur_dir '/data/prac']; % Location to save data
-OutputFilePrac = [DataFolderPrac '/ResultsT_s' subjNum '_' sessionNum '_' subj_init '.mat'];
+OutputFilePrac = [DataFolderPrac '/ResultsT_s' subjNum '_' subj_init '.mat'];
 % ET Results 
 DataFolderET = [cur_dir '/data/ET']; % Location to save data
-OutputFileET = [DataFolderET '/ResultsET_s' subjNum '_' sessionNum '_' subj_init '.mat'];
+OutputFileET = [DataFolderET '/ResultsET_s' subjNum '_' subj_init '.mat'];
 
 % Find screen centers and other relevant location information 
 screenWidth = rect(3);
@@ -122,9 +123,6 @@ fixations = [A ;B; C; D]';
 fixationSizeDeg = .2; % .12 in 2008 paper 
 fixationSize = fixationSizeDeg / DPP; % pixels 
 
-%For pseudoblock code
-fakeblock = 0;
-
 %% ZONE LOCATIONS 
 % SET UP CENTERS FOR EACH CUE ZONE 
 zOne.center = [(extraScreenX + (stimRectWidth / 6)), (stimRectWidth / 6)];
@@ -145,7 +143,7 @@ memCueDeg = 2; %height/width of memory cue
 memOffsetDeg = 7.4; %eccentricity
 memCueDim = (memCueDeg / DPP) / 2; % divided by 2 because helps with referencing from cue center  
 intialGap = (memOffsetDeg/DPP) - (2 * memCueDim);  
- 
+
 %% INITIATE TRIAL 
 
 % Trial number starts at 1
@@ -200,4 +198,8 @@ end
 
 %% Condition Randomizer
 xTally = 0; %keep track of Xs in a row
+
+% Determine trial types
+saccadeBank = BalanceFactors(totaltrials/4, 1, [0 1 2 3]); % 0: no sac (50ms), 1: no sac (500 ms), 2: 50 ms, 3: 500 ms
+
 

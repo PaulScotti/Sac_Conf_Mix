@@ -42,7 +42,7 @@ end
 [a,b]=RectCenter(rect);
 WaitSetMouse(a,b,0); % set cursor and wait for it to take effect
 
-HideCursor;
+% HideCursor;
 buttons=0;
 
 % priorityLevel=MaxPriority(w);

@@ -13,7 +13,7 @@ runfailed = 0;
 % time (staretime), and measures if the subject is within
 % acceptable range of the fixation point (curfx, curfy).
 
-while (GetSecs()) < staretime
+while GetSecs < staretime
     
     if ETconnected
         error = Eyelink('CheckRecording');
