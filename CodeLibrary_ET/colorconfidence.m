@@ -66,6 +66,9 @@ elseif flip == 2
         reportedcolor = - mod(minDistanceIndex + randrotate,360);
     end
 end
+if reportedcolor == 0
+    reportedcolor = 360;
+end
 
 while any(buttons) % wait for release
 [x,y,buttons] = GetMouse(window);

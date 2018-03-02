@@ -374,6 +374,16 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
             case 4
                 testColor = LR;
         end
+        switch retino
+            case 1
+                retino = UL;
+            case 2
+                retino = UR;
+            case 3 
+                retino = LL;
+            case 4
+                retino = LR;
+        end
         drawMemTest = Screen('flip', window); % time at screen flip / stim presentation
         
         while drawMemTest > GetSecs() - .05 - monitorFlipInterval
@@ -411,7 +421,7 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
             if block==numBlocks
                 % save .MAT file
                 run sizing; % get pixel dimensions
-                save (OutputFile, 'Results', 'pixels', 'degrees');
+                save (OutputFile, 'Results');
                 
                 run joker
                 
@@ -448,6 +458,8 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
                 % END OF BLOCK
             else             
                 % SELF-PACED BREAK BETWEEN BLOCKS
+                save (OutputFile, 'Results');
+                
                 run joker;
                 
                 Screen('TextFont', window, 'Helvetica');
@@ -512,8 +524,7 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
             trial = trial + 1;
             grandTrial = grandTrial + 1;
             %Reset eyetracking variables
-            et_good_check = 0; et_total_check = 0; et_null_check = 0;
-            fixlosscount = 0;
+            et_good_check = 0; et_total_check = 0; et_null_check = 0; fixlosscount = 0;
             ma{trial} = []; mx{trial} = []; my{trial} = [];
             matETttrial{trial} = []; matETtblock{trial} = [];
             WaitSecs(.5); % ITI

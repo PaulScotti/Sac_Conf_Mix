@@ -17,8 +17,8 @@ pixels.fixationSquare = stimRectWidth / 3;
 pixels.cue =  2 * memCueDim; 
 pixels.probe = pixels.cue; 
 pixels.memTest = pixels.cue; 
-pixels.ffEcc = ff_probe;  
-pixels.nfEcc = nf_probe;  
+pixels.ffEcc = cueDist2ff;  
+pixels.nfEcc = cueDist2nf;  
 pixels.intialGap = intialGap;   
  
 % In visual degrees 

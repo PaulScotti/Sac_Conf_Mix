@@ -78,7 +78,7 @@ while pageCounter <= length(instrfiles)
     end
 end
 
-saccadeBank_prac = BalanceFactors(pracTrialNum, 1, [0 1 2 3]); % 0: no sac (50ms), 1: no sac (500 ms), 2: 50 ms, 3: 500 ms
+saccadeBank_prac = BalanceFactors(ceil(pracTrialNum/4), 1, [0 1 2 3]); % 0: no sac (50ms), 1: no sac (500 ms), 2: 50 ms, 3: 500 ms
 %% TRIAL LOOP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 while trial <= pracTrialNum
     
@@ -158,10 +158,21 @@ while trial <= pracTrialNum
             switch ffPos
                 case 'A'
                     position = datasample([2 3 4],1);
+                    retino = position;
                 case 'B'
                     position = datasample([2 4],1);
+                    if position == 2
+                        retino = 1;
+                    elseif position == 4
+                        retino = 3;
+                    end
                 case 'C'
                     position = datasample([3 4],1);
+                    if position == 3
+                        retino = 1;
+                    elseif position == 4
+                        retino = 2;
+                    end
             end
         case 'B' 
             memCueLoc{1} = [zTwo.center(1)-memCueDim,zTwo.center(1)+memCueDim;zTwo.center(2)-memCueDim,zTwo.center(2)+memCueDim];
@@ -171,10 +182,21 @@ while trial <= pracTrialNum
             switch ffPos
                 case 'A'
                     position = datasample([1 3],1);
+                    if position == 1
+                        retino = 2;
+                    elseif position == 3
+                        retino = 4;
+                    end
                 case 'B'
                     position = datasample([1 3 4],1);
+                    retino = position;
                 case 'D'
                     position = datasample([3 4],1);
+                    if position == 3
+                        retino = 1;
+                    elseif position == 4
+                        retino = 2;
+                    end
             end
         case 'C' 
             memCueLoc{1} = [zFour.center(1)-memCueDim,zFour.center(1)+memCueDim;zFour.center(2)-memCueDim,zFour.center(2)+memCueDim];
@@ -184,10 +206,21 @@ while trial <= pracTrialNum
             switch ffPos
                 case 'A'
                     position = datasample([1 2],1);
+                    if position == 1
+                        retino = 2;
+                    elseif position == 2
+                        retino = 4;
+                    end
                 case 'C'
                     position = datasample([1 2 4],1);
+                    retino = position;
                 case 'D'
                     position = datasample([2 4],1);
+                    if position == 2
+                        retino = 1;
+                    elseif position == 4
+                        retino = 3;
+                    end
             end
         case 'D' 
             memCueLoc{1} = [zFive.center(1)-memCueDim,zFive.center(1)+memCueDim;zFive.center(2)-memCueDim,zFive.center(2)+memCueDim];
@@ -197,15 +230,26 @@ while trial <= pracTrialNum
             switch ffPos
                 case 'B'
                     position = datasample([1 2],1);
+                    if position == 1
+                        retino = 3;
+                    elseif position == 2
+                        retino = 4;
+                    end
                 case 'C'
                     position = datasample([1 3],1);
+                    if position == 1
+                        retino = 2;
+                    elseif position == 3
+                        retino = 4;
+                    end
                 case 'D'
                     position = datasample([1 2 3],1);
+                    retino = position;
             end
         otherwise
             error('Impossible memory cue position');
     end
-
+        
     % SET COLORS FOR SQUARES (adjacent colors are -90/90 degrees away, diagonal is 180)
     randcolor = randi(360);
     randCW = BalanceFactors(1,1,[-90 90]);

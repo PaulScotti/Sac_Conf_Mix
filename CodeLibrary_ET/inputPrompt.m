@@ -4,7 +4,7 @@
 
 % Modified from xyz_fMRI2 01/22/2015
 
-expt_ID = 'ProbabilityTrace';
+expt_ID = 'SacConfMix';
 
 % Basic Setup
 n = 1;
@@ -25,7 +25,7 @@ defaults{n} = '16'; n = n + 1;
 prompt{n} = 'Eyetracker Connected? (0/1)';
 defaults{n} = '0'; n = n + 1; 
 prompt{n} = 'Testing Room';
-defaults{n} = 'B'; n = n + 1;
+defaults{n} = 'A'; n = n + 1;
 prompt{n} = 'Practice (0/1)'; 
 defaults{n} = '0'; n = n + 1;
 
