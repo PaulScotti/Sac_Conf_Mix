@@ -13,6 +13,8 @@ addpath(genpath((analysisDir)));
 % select what model you want to use
 model2 = SwapModel_SacMix;
 
+analyzeSac = 0; %select which condition to analyze (0 - 3)
+
 % Collapse if visualizing data, don't if doing stats testing
 subj_collapsed = 1;
 
@@ -67,7 +69,7 @@ for p = 1:numSubj
             da_4 = [da_4; col_diff(i)];
         end
         
-        if saccade(i) == 2
+        if saccade(i) == analyzeSac
             switch retino(i)
                 case 1
                     switch position(i) 
@@ -117,11 +119,30 @@ for p = 1:numSubj
         if Rdist(i) < 0
             Rdist(i) = - Rdist(i);
             Cdist(i) = - Cdist(i);
-            da_3(i) = - da_3(i);
+            switch analyzeSac
+                case 0
+                    da_1(i) = - da_1(i);
+                case 1
+                    da_2(i) = - da_2(i);
+                case 2
+                    da_3(i) = - da_3(i);
+                case 3
+                    da_4(i) = - da_4(i);
+            end
         end
     end
 
-    da_a = [da_3];
+    switch analyzeSac
+        case 0
+            da_a = [da_1];
+        case 1
+            da_a = [da_2];
+        case 2
+            da_a = [da_3];
+        case 3
+            da_a = [da_4];
+    end
+        
     datasets_a.errors = da_a;
     datasets_a.subjectID = p;
     datasets_a.distractors = distractors;
