@@ -1,7 +1,7 @@
 % PRESS RIGHT ARROW KEY TO BEGIN
 Screen('TextFont', window, 'Helvetica');
 Screen('TextSize', window, 30);
-startText = 'Is there an error with the eye tracker?\nIf yes, please inform your experimenter.\nIf not, press the RIGHT ARROW key to continue.';
+startText = 'Is there an error with the eye tracker?\nIf yes, please inform your experimenter.\nIf not, press the RIGHT ARROW key to continue.\n(experimenter: recalibrate button is ''p'' key)';
 DrawFormattedText(window,startText,'center' ,'center', 0) ;
 Screen('flip', window);
 begin = 1;

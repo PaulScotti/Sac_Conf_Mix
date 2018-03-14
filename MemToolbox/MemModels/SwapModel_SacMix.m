@@ -63,7 +63,7 @@ function model = SwapModel_SacMix()
   end
 end
 
-function p = SwapModelPDF(data, muT, g, C, R, sdT, sdD)
+function p = SwapModelPDF(data, muT, g, R, C, sdT, sdD)
   % Parameter bounds check
   if g+C+R > 1
     p = zeros(size(data.errors));

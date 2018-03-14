@@ -374,16 +374,6 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
             case 4
                 testColor = LR;
         end
-        switch retino
-            case 1
-                retino = UL;
-            case 2
-                retino = UR;
-            case 3 
-                retino = LL;
-            case 4
-                retino = LR;
-        end
         drawMemTest = Screen('flip', window); % time at screen flip / stim presentation
         
         while drawMemTest > GetSecs() - .05 - monitorFlipInterval

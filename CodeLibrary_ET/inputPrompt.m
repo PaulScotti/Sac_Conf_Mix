@@ -21,7 +21,7 @@ defaults{n} = '12' ;   n    =   n   +  1;
 prompt{n} = 'Trials per Block'; %60 trials are spatio
 defaults{n} = '32'; n = n + 1;
 prompt{n} = 'PracTrials';  
-defaults{n} = '16'; n = n + 1;
+defaults{n} = '12'; n = n + 1;
 prompt{n} = 'Eyetracker Connected? (0/1)';
 defaults{n} = '0'; n = n + 1; 
 prompt{n} = 'Testing Room';
