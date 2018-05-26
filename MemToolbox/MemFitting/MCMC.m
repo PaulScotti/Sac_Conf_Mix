@@ -162,12 +162,11 @@ function posteriorSamples = MCMC(data, model, varargin)
         count*startInfo(1).numMonte, n);
     end
     %% Paul Note: This is forced convergence!!
-    if count*startInfo(1).numMonte > 30000
+    if count*startInfo(1).numMonte > 35000
         falseConverge = true;
         disp('ALERT! Forced the convergence! Retrying...');
         disp(data.subjectID);
         converged = true;
-        posteriorSamples = [];
     end
   end
   if falseConverge == false

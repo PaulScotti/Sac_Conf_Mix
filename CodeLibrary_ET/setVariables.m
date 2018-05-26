@@ -11,6 +11,7 @@ grey = white / 2;
 Screen('Preference', 'SkipSyncTests', 1); %disable warning pop-ups
 if ~ETconnected
     try
+    Screen('Preference', 'SkipSyncTests', 0); %EWD 4/27/18
     [window,rect] = Screen('OpenWindow',screenNumber, grey);
     catch
     Screen('Preference', 'SkipSyncTests', 1);
@@ -72,7 +73,7 @@ switch testingRoom
     case 1
         whitexyY = [.282 .306 96.75]'; %for testing room A (jglab)
     case 2
-        whitexyY=[.295 .331 89.1]'; %for testing room B (jglab)
+        whitexyY=[.348 .422 89.5]'; %for testing room B (jglab)
 end
 
 whiteXYZ = xyYToXYZ(whitexyY);

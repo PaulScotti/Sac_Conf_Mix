@@ -1,6 +1,11 @@
 %% Continuous asymmetrical confidence response
 randrotate = randi(360);
-flip = randi(2); 
+flip = randi(2);
+
+
+flip = 2;
+
+
 prefs = getPreferences(screenCenterX,screenCenterY,randrotate,flip,fullcolormatrix);
 colorWheelLocations = colorwheelLocations(window,prefs);
 fullcolormatrixFlip = flipud(fullcolormatrix);
@@ -223,7 +228,34 @@ end
 HideCursor;
 
 %calculate difference
-col_diff = wrap360(testColor, reportedcolor);    
+flip
+col_diff = wrap360(testColor, reportedcolor)    
+
+
+switch retino
+    case 1
+        ret = UL;
+        ctr = within360(ret + 180);
+    case 2 
+        ret = UR;
+        ctr = within360(ret + 180);
+    case 3 
+        ret = LL;
+        ctr = within360(ret + 180);
+    case 4
+        ret = LR;
+        ctr = within360(ret + 180);
+end
+if position == retino
+    ret = testColor + 90;
+    ctr = testColor - 90;
+end
+if abs(wrap360(ret, reportedcolor)) < abs(wrap360(ctr, reportedcolor))
+    col_diff = abs(wrap360(testColor, reportedcolor));
+else
+    col_diff = - abs(wrap360(testColor, reportedcolor));
+end
+col_diff
 
 %draw previous ring
 if flip == 1

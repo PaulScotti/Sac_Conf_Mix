@@ -81,6 +81,7 @@ if ETconnected
             end
             if fixdone_variable == 1
                 fixdone = 1;
+                fixDoneTime = GetSecs;
             end
         end
     end

@@ -241,8 +241,13 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
         end
         
         % FIXATE FOR 1000 MS
+        if ETconnected
+            startedFixTimer = prefix_execution;
+        else
+            startedFixTimer = WaitSecs(1);
+        end
         Screen('DrawDots', window,firstFix,[fixationSize],white, [0,0], 1);
-        startedFixTimer = Screen('Flip', window);
+        Screen('Flip', window);
         staretime = startedFixTimer + 1;
         curfx = firstFix(1);
         curfy = firstFix(2);
@@ -253,10 +258,14 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
         end
 
         % DRAW MEMORY CUE AND REMAIN FIXATED FOR 500 MS
+        drawMemCueTime = GetSecs;
+        if ~ETconnected
+            WaitSecs(.5);
+        end
         Screen('DrawDots', window,firstFix,[fixationSize],white, [0,0], 1); 
         Screen('FrameRect', window, [0 0 0], memCueLoc{position}, 4);
         Screen('FrameRect', window, [0 0 0], memCueLoc{position});
-        drawMemCueTime = Screen('Flip', window);
+        Screen('Flip', window);
         staretime = drawMemCueTime + .5;
         run keepFix;
         if runfailed
@@ -265,8 +274,12 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
         end        
 
         % REMOVE MEMORY CUE AND REMAIN FIXATED (1s)
+        remMemCueTime = GetSecs;
+        if ~ETconnected
+            WaitSecs(1);
+        end
         Screen('DrawDots', window,firstFix,[fixationSize],white, [0,0], 1);
-        remMemCueTime = Screen('Flip', window);
+        Screen('Flip', window);
         staretime = remMemCueTime + 1;
         run keepFix;
         if runfailed
@@ -275,8 +288,12 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
         end
 
         % DRAW SACCADE CUE AND RECORD EYES
+        drawSacTime = GetSecs;
+        if ~ETconnected
+            WaitSecs(.35);
+        end
         Screen('DrawDots', window,newFix,[fixationSize],white, [0,0], 1);
-        drawSacTime = Screen('Flip', window);          
+        Screen('Flip', window);          
         if saccade == 0 || saccade == 2 % 50 ms after saccade end
                 disp('50 ms delay');
         elseif saccade == 1 || saccade == 3 % 500 ms after saccade end
@@ -296,7 +313,11 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
         if ETconnected
             if saccade > 1
                 run record_eyes_2;
+                waitFixTime = fixDoneTime; 
             else
+                if saccade <= 1
+                    waitFixTime = drawSacTime; 
+                end
                 run keepFix;
                 fixdone = 1;
                 sac_execution = nan;
@@ -314,9 +335,9 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
             %set new delays
             switch saccade
                 case 0 % no saccade bin
-                    Delay = .35; %350 ms
+                    Delay = .4; %350 ms + 50 ms after fixation
                 case 1 % no saccade bin
-                    Delay = .85; %850 ms
+                    Delay = .85; %350 ms + 500 ms after fixation
                 case 2 % retinotopic trace bin
                     Delay = .05; %50 ms after new fixation
                 case 3 % postSac baseline bin
@@ -327,8 +348,8 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
                 %Wait until they've fixated to new location
                 if fixdone == 0
                     run record_eyes_2
+                    waitFixTime = fixDoneTime; 
                 elseif fixdone == 1
-                    waitFixTime = GetSecs; 
                     curfx = newFix(1);
                     curfy = newFix(2);
                     staretime = waitFixTime + Delay - monitorFlipInterval;
@@ -338,6 +359,7 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
                 end
             end
         else
+            % if no ET connected
             switch saccade
                 case 0 % no saccade bin
                     Delay = .05 + .35; 
@@ -376,8 +398,13 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
         end
         drawMemTest = Screen('flip', window); % time at screen flip / stim presentation
         
-        while drawMemTest > GetSecs() - .05 - monitorFlipInterval
+        while drawMemTest > GetSecs - .05 + monitorFlipInterval
             run record_eyes_2;
+        end
+        
+        %TESTING
+        if ~ETconnected
+            WaitSecs(1);
         end
         
         % MASK
@@ -387,7 +414,7 @@ while block <= numBlocks %first session ends after 3 blocks out of 8 total
         Screen('DrawTexture', window, texMask, [], memCueLoc{4});
         drawMasks = Screen('flip', window);
 
-        while drawMasks > GetSecs() - .2 - monitorFlipInterval
+        while drawMasks > GetSecs - .2 + monitorFlipInterval
             run record_eyes_2;
         end
         

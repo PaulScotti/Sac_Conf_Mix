@@ -34,7 +34,7 @@ function model = SwapModel_SacMix()
     model.pdf = @SwapModelPDF;
     model.modelPlot = @model_plot;
     model.generator = @SwapModelGenerator;
-    model.start =   [0, 0.3, 0.1, 0.3, 10, 10;  % muT, g, C, R, sdT, sdD
+    model.start =   [0, 0.3, 0.1, 0.3, 10, 10;  % muT, g, R, C, sdT, sdD
                     10, 0.2, 0.2, 0.2, 20, 20; 
                     -10, 0.4, 0.3, 0.1, 30, 30]; 
 
@@ -65,7 +65,7 @@ end
 
 function p = SwapModelPDF(data, muT, g, R, C, sdT, sdD)
   % Parameter bounds check
-  if g+C+R > 1
+  if g+R+C > 1
     p = zeros(size(data.errors));
     return;
   end
@@ -75,8 +75,8 @@ function p = SwapModelPDF(data, muT, g, R, C, sdT, sdD)
   end
   
   p = (1-g-C-R).*vonmisespdf(data.errors(:),muT,deg2k(sdT)) + ...
-      (C).*vonmisespdf(data.errors(:),-90,deg2k(sdD)) + ...
       (R).*vonmisespdf(data.errors(:),90,deg2k(sdD)) + ...
+      (C).*vonmisespdf(data.errors(:),-90,deg2k(sdD)) + ...
           (g).*unifpdf(data.errors(:), -180, 180);
 end
 
